@@ -1,14 +1,37 @@
 # Installation
-- Install Conan2
-    - pip install conan --break-system-packages
-- Detect Conan profile
-    - conan profile detect
-- Run conan install to setup the environment for the projekt 
-    - conan install . --output-folder=build --build=missing
-- Goto build folder and run cmake
-    - cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
-- Compile project
-    - cmake --build . -v
+- use gcc13 for compiling 
+
+```shell
+# create pyhton env 
+python3 -m venv .venv
+source .venv/bin/activate
+
+#install conan
+pip install conan
+
+# detect conan profile once
+conan profile detect
+
+# build dependecies
+conan install . --output-folder=build --build=missing
+cd build
+
+# build project
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+cmake --build . -v
+```
+
+# Docker
+```shell
+# build docker image
+docker build -t my-conan-gcc13 .
+
+# start docker container and pass workspace to it
+sudo docker run -it --rm -v /home/maximilian/Git/socketcan_mcap_logger:/workspace:Z -w /workspace my-conan-gcc13
+
+# build 
+./init.sh
+```
 
 # Usage
 MCL uses gflags. Therefor it is required to parse some aruguments into the programm
